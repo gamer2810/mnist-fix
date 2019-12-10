@@ -125,7 +125,7 @@ app.get('/sync', (req, res) => {
     });
 });
 
-app.set('port', process.env.port || 3000);
+app.set('port', process.env.PORT || 3000);
 app.listen(app.get('port'), () => {
     console.log(`Server is listening on ${app.get('port')}`);
 });
