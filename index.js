@@ -99,8 +99,8 @@ app.post('/upload', (req, res) => {
                 console.log(fullPath);
                 let username = req.body.username;
                 let pythonProcess= child_process.spawn('python',["./public/ml/predict.py",fullPath]);
-                // pythonProcess.stdout.pipe(process.stdout);
-                // pythonProcess.stderr.pipe(process.stderr);
+                pythonProcess.stdout.pipe(process.stdout);
+                pythonProcess.stderr.pipe(process.stderr);
                 let prediction = -1;
                 pythonProcess.stdout.on('data',(data)=>{
                     prediction = data;
