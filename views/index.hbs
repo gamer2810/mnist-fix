@@ -1,0 +1,61 @@
+<div class="container d-flex align-items-center flex-column">
+    <header class="d-flex align-items-center">
+        <img src="/images/icon-128.png" class="mr-3">
+        <h1 class="mr-3">Demo Upload</h1>
+        <button id="add" class="btn btn-primary">Add</button>
+    </header>
+    <div id="add-card" class="form-card w-50" style="display: none">
+        <div class="card-body">
+            <form action="/upload" method="post" enctype="multipart/form-data"
+                class="d-flex justify-content-center flex-column was-validated">
+                <div class="form-group row">
+                    <label for="username" class="col-sm-2 col-form-label">Username</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="username" id="username" placeholder="Username" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="avatar" class="col-sm-2 col-form-label">Avatar</label>
+                    <div class="col-sm-10">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" name="avatar" id="avatar" required>
+                            <label class="custom-file-label" for="avatar">Choose file...</label>
+                            <div class="invalid-feedback">Example invalid custom file feedback</div>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+    <div class="my-container my-3">
+        <ul class="list-user">
+            {{#each users}}
+            <li class="list-user-item d-flex align-items-center justify-content-between">
+                <img src="{{imagepath}}">
+                <h5>Prediction = {{prediction}}</h5>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-user" data-toggle="modal" data-target="#avatarModal"><i
+                            class="fa fa-eye" aria-hidden="true"></i></button>
+                    <button type="button" class="btn btn-user remove-user" data-user="{{id}}"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                </div>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+
+    <div class="modal fade" id="avatarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered my-modal" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="my-modal-content text-center">
+                        <img src="/images/32.jpg">
+                        <h5>Johnson Baby</h5>
+                        <button class="btn btn-primary my-3"><i class="fa fa-upload" aria-hidden="true"></i> Upload</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

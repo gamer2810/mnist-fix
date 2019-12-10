@@ -1,0 +1,153 @@
+.my-card {
+    /* border: 1px #ddd solid; */
+    border-radius: 10px;
+    width: 50%;
+    padding: 50px;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+.my-card img {
+    border-radius: 50%;
+    width: 35%;
+}
+
+.form-card {
+    border-radius: 10px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+}
+
+.my-container {
+    width: 50%;
+    max-height: 75vh;
+    overflow-y: auto;
+    border-radius: 10px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+}
+
+
+.my-container::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+.my-container::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background: #f1f1f1;
+}
+
+/* Handle */
+.my-container::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: #ddd;
+}
+
+/* Handle on hover */
+.my-container::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
+
+.list-user {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.list-user-item {
+    padding: 10px 15px;
+    border-bottom: 1px #ddd solid;
+}
+
+.list-user-item:last-child {
+    border-bottom: none;
+}
+
+.list-user-item img {
+    border-radius: 50%;
+    background-color: #55A6FF;
+    height: 100px;
+    width: 100px;
+}
+
+.btn-user {
+    border-radius: 50px;
+    background-color: #55A6FF;
+    color: #fff;
+    border: 3px solid #54596E;
+}
+
+.btn-user:first-child {
+    border-right: none;
+}
+
+.btn-user:last-child {
+    border-left: none;
+    color: #54596E;
+    background-color: #9AF43B;
+}
+
+
+.btn-user:hover {
+    background-color: #5597E2;
+    color: #54596E;
+}
+
+.modal-body {
+    position: relative;
+    height: 250px;
+    padding: 0;
+    background: #fff;
+    border-radius: 10px;
+}
+
+.modal-body::after {
+    border-radius: 10px 10px 0 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 30%;
+    width: 100%;
+    content: '';
+    background: #2272ca;
+}
+
+.modal-content {
+    border-radius: 10px;
+    border: none;
+}
+
+.modal-dialog {
+    border-radius: 10px;
+    width: 350px;
+}
+
+.my-modal-content {
+    z-index: 1;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50px);
+}
+
+.my-modal-content img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+.my-modal-content h5 {
+    text-align: center;
+}
+
+.btn-primary {
+    border-radius: 50px;
+    background: #55A6FF;
+    border: 3px solid #54596E;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: #5597E2;
+    color: #54596E;
+}
