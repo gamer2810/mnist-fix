@@ -95,10 +95,8 @@ app.post('/upload', (req, res) => {
                 });
             } else {
                 let filename = `uploads/${req.file.filename}`;
-                let fullPath = "./upload-file-multer-master/public/" + filename;
-                console.log(fullPath);
                 let username = req.body.username;
-                let pythonProcess= child_process.spawn('python',["./public/ml/predict.py",fullPath]);
+                let pythonProcess= child_process.spawn('python',["./public/ml/predict.py",filename]);
                 pythonProcess.stdout.pipe(process.stdout);
                 pythonProcess.stderr.pipe(process.stderr);
                 let prediction = -1;
