@@ -95,7 +95,7 @@ app.post('/upload', (req, res) => {
                 });
             } else {
                 let filename = `uploads/${req.file.filename}`;
-                let filePath = `./public/'+filename;
+                let filePath = `./public/`+filename;
                 let username = req.body.username;
                 let pythonProcess= child_process.spawn('python',["./public/ml/predict.py",filePath]);
                 pythonProcess.stdout.pipe(process.stdout);
