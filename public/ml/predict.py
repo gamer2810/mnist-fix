@@ -7,7 +7,7 @@ import sys
 from PIL import Image
 from keras.layers import Dense, Conv2D, Flatten
 
-MODEL_SAVE_PATH = './trained_model.json'
+MODEL_SAVE_PATH = './public/ml/trained_model.json'
 image_path = sys.argv[1]
 image = Image.open(image_path).resize((28,28)).convert('L')
 image = np.array(image)
@@ -18,7 +18,7 @@ jsonmodel = json_file.read()
 json_file.close()
 
 loadmodel = models.model_from_json(jsonmodel)
-loadmodel.load_weights('./KhaMnistweights.h5')
+loadmodel.load_weights('./public/ml/KhaMnistweights.h5')
 
 result = loadmodel.predict(image)
 prediction = np.argmax(result)
