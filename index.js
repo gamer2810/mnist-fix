@@ -1,130 +1,123 @@
-const express = require('express');
-const expressHbs = require('express-handlebars');
-const multer = require('multer');
-const app = express();
-const path = require('path');
-let models = require('./models');
-const bodyParser = require('body-parser');
-
+const express = require("express");
+const expressHbs = require("express-handlebars");
+const multer = require("multer");
+const path = require("path");
+const bodyParser = require("body-parser");
+const flash = require("connect-flash");
 const child_process = require("child_process");
+const session = require("express-session");
 
+const app = express();
 
-app.use(express.static(__dirname + '/public'));
-app.engine('hbs', expressHbs({
-    extname: 'hbs',
-    defaultLayout: 'layout',
-    layoutsDir: __dirname + '/views/layouts',
-    partialsDir: __dirname + '/views/partials',
-}));
+app.use(express.static(__dirname + "/public"));
+app.engine(
+  "hbs",
+  expressHbs({
+    extname: "hbs",
+    defaultLayout: "layout",
+    layoutsDir: __dirname + "/views/layouts",
+    partialsDir: __dirname + "/views/partials",
+  }),
+);
 
-app.set('view engine', 'hbs');
+app.set("view engine", "hbs");
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({
-    extended: false
-}));
+app.use(
+  bodyParser.urlencoded({
+    extended: false,
+  }),
+);
 
 // parse application/json
 app.use(bodyParser.json());
+app.use(
+  session({
+    secret: "secret",
+    saveUninitialized: false,
+    resave: false,
+  }),
+);
+
+app.use(flash());
 
 // Set The Storage Engine
 const storage = multer.diskStorage({
-    destination: './public/uploads/',
-    filename: function (req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-    }
+  destination: "./public/uploads/",
+  filename: function(req, file, cb) {
+    cb(null, file.fieldname + "-" + Date.now() + path.extname(file.originalname));
+  },
 });
 
 // Init Upload
 const upload = multer({
-    storage: storage,
-    limits: {
-        fileSize: 1000000
-    },
-    fileFilter: function (req, file, cb) {
-        checkFileType(file, cb);
-    }
-}).single('avatar');
+  storage: storage,
+  limits: {
+    fileSize: 1000000,
+  },
+  fileFilter: function(req, file, cb) {
+    checkFileType(file, cb);
+  },
+}).single("avatar");
 
 // Check File Type
 function checkFileType(file, cb) {
-    // Allowed ext
-    const filetypes = /jpeg|jpg|png|gif/;
-    // Check ext
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-    // Check mime
-    const mimetype = filetypes.test(file.mimetype);
+  // Allowed ext
+  const filetypes = /jpeg|jpg|png|gif/;
+  // Check ext
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  // Check mime
+  const mimetype = filetypes.test(file.mimetype);
 
-    if (mimetype && extname) {
-        return cb(null, true);
-    } else {
-        cb('Error: Images Only!');
-    }
+  if (mimetype && extname) {
+    return cb(null, true);
+  } else {
+    cb("Error: Images Only!");
+  }
 }
 
-app.get('/', (req, res) => {
-    models.Users.findAll().then(users => {
-        res.render('index', {
-            users: users
+app.get("/", (req, res) => {
+  const flash = req.flash("result");
+  let result = null;
+  if (flash[0]) {
+    result = JSON.parse(flash[0]);
+    res.locals.result = result;
+  }
+  res.render("index");
+});
+
+app.post("/upload", (req, res) => {
+  upload(req, res, (err) => {
+    if (err) {
+      res.render("index", {
+        msg: err,
+      });
+    } else {
+      if (req.file == undefined) {
+        res.render("index", {
+          msg: "Error: No File Selected!",
         });
-    });
+      } else {
+        let filename = `uploads/${req.file.filename}`;
+        let filePath = `./public/` + filename;
+        let pythonProcess = child_process.spawn("python3", ["./public/ml/predict.py", filePath]);
+        pythonProcess.stdout.pipe(process.stdout);
+        pythonProcess.stderr.pipe(process.stderr);
+        let prediction = -1;
+        pythonProcess.stdout.on("data", (data) => {
+          prediction = data.toString("utf8");
+        });
+        pythonProcess.on("exit", function() {
+          const result = { filename, prediction };
+          req.flash("result", JSON.stringify(result));
+          res.redirect("/");
+        });
+      }
+    }
+  });
 });
 
-app.get('/users', (req, res) => {
-    res.render('user');
-});
-
-app.delete('/users/:id', (req, res) => {
-    models.Users.destroy({
-        where: {id: req.params.id}
-    }).then(users => {
-        res.sendStatus(200);
-    });
-})
-
-app.post('/upload', (req, res) => {
-    upload(req, res, (err) => {
-        if (err) {
-            res.render('index', {
-                msg: err
-            });
-        } else {
-            if (req.file == undefined) {
-                res.render('index', {
-                    msg: 'Error: No File Selected!'
-                });
-            } else {
-                let filename = `uploads/${req.file.filename}`;
-                let filePath = `./public/`+filename;
-                let username = req.body.username;
-                let pythonProcess= child_process.spawn('python',["./public/ml/predict.py",filePath]);
-                pythonProcess.stdout.pipe(process.stdout);
-                pythonProcess.stderr.pipe(process.stderr);
-                let prediction = -1;
-                pythonProcess.stdout.on('data',(data)=>{
-                    prediction = data;
-                });
-                pythonProcess.on('exit', function() {
-                    models.Users.create({
-                        username: username,
-                        imagepath: filename,
-                        prediction: prediction,
-                    }).then(user => {
-                        res.redirect('/');
-                    });
-                  });
-            }
-        }
-    });
-})
-
-app.get('/sync', (req, res) => {
-    models.sequelize.sync().then(() => {
-        res.send('database create');
-    });
-});
-
-app.set('port', process.env.PORT || 3000);
-app.listen(app.get('port'), () => {
-    console.log(`Server is listening on ${app.get('port')}`);
+app.set("port", process.env.PORT || 3000);
+app.listen(app.get("port"), () => {
+  console.log(`Server is listening on ${app.get("port")}`);
 });
