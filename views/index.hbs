@@ -5,14 +5,13 @@
         {{!-- <button id="add" class="btn btn-primary">Add</button> --}}
     </header>
 
-    <div id="wPaint"
-        style="position:relative; width:250px; height:250px; background-color:#7a7a7a; margin:70px auto 20px auto;">
+    <div id="paint" style="position:relative">
+        <div id="wPaint"
+            style="position:relative; width:250px; height:250px; margin:70px auto 20px auto;">
+        </div>
     </div>
-    <center style="margin-bottom: 50px;">
-        {{!-- <input type="button" value="toggle menu" onclick="console.log($('#wPaint').wPaint('menuOrientation')); $('#wPaint').wPaint('menuOrientation', $('#wPaint').wPaint('menuOrientation') === 'vertical' ? 'horizontal' : 'vertical');"/> --}}
-    </center>
 
-    <center id="wPaint-img"></center>
+    {{!-- <center id="wPaint-img"></center> --}}
 
     <div class="btn-group" role="group" aria-label="Basic example">
         <button id="predict" class="btn btn-primary">Predict</button>

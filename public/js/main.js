@@ -1,4 +1,12 @@
 $(document).ready(function() {
+    const load = `
+    <div id="load" class="d-flex align-items-center justify-content-center" style="position:absolute; top: 0; left: 0; width:250px; height:250px; margin:70px auto 20px auto; background-color:rgba(255, 255, 255, 0.4)">
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    `;
+
     $("#add").click(function(e) {
         e.preventDefault();
         $("#add-card").slideToggle();
@@ -19,24 +27,28 @@ $(document).ready(function() {
     });
 
     function upload(image) {
+        $("#paint").append(load);
         $.ajax({
             type: "POST",
             url: "/upload-base64",
             data: { image: image },
             success: function(data) {
-				$('.result').empty()
-				data.result.forEach((r, index) => {
-					$('.result').append(`
+                $('#load').remove();
+                $(".result").empty();
+                data.result.forEach((r, index) => {
+                    $(".result").append(`
 					<div class="d-flex justify-content-center align-items-center">
 						<h5 class="m-0 mr-3">${index}</h5>
 						<div class="progress w-100">
-							<div class="progress-bar${index == data.prediction ? " bg-success" : ""}" role="progressbar" style="width: ${r}%;" aria-valuenow="${r}" aria-valuemin="0"
+							<div class="progress-bar${
+                                index == data.prediction ? " bg-success" : ""
+                            }" role="progressbar" style="width: ${r}%;" aria-valuenow="${r}" aria-valuemin="0"
 								aria-valuemax="100"></div>
 						</div>
 					</div>
-					`)
-				})
-			}
+					`);
+                });
+            }
         });
     }
 

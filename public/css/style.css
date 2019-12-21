@@ -152,6 +152,9 @@
     color: #54596E;
 }
 
-#wPaint, .wPaint-canvas-bg, .wPaint-canvas, .wPaint-canvas-temp {
+#wPaint,
+.wPaint-canvas-bg,
+.wPaint-canvas,
+.wPaint-canvas-temp {
     border-radius: 15px;
 }
