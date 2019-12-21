@@ -151,3 +151,7 @@
     background: #5597E2;
     color: #54596E;
 }
+
+#wPaint, .wPaint-canvas-bg, .wPaint-canvas, .wPaint-canvas-temp {
+    border-radius: 15px;
+}
