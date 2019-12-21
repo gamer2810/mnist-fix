@@ -106,5 +106,6 @@ $(document).ready(function() {
 
     $("#clear").click(function() {
         $("#wPaint").wPaint("clear");
+        $(".result").empty();
     });
 });
