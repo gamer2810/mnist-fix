@@ -106,16 +106,15 @@ app.post("/upload-base64", async (req, res) => {
     ]);
     pythonProcess.stdout.pipe(process.stdout);
     pythonProcess.stderr.pipe(process.stderr);
-    let prediction = -1;
     let result = "";
     pythonProcess.stdout.on("data", data => {
-        result = data.toString("utf8");
+        result += data.toString("utf8");
         console.log(`INFO::: python-data: ${result}`)
+    });
+    pythonProcess.on("exit", function() {
         result = result.substr(0, result.length - 1);
         result = result.split("\n");
         result = result.map(r => Number(r) * 100);
-    });
-    pythonProcess.on("exit", function() {
         let prediction = 0;
         result.forEach(
             (r, index) =>
