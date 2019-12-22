@@ -1,30 +1,13 @@
 $(document).ready(function() {
+    let run = false;
+
     const load = `
-    <div id="load" class="d-flex align-items-center justify-content-center" style="position:absolute; top: 0; left: 0; width:250px; height:250px; margin:70px auto 20px auto; background-color:rgba(255, 255, 255, 0.4)">
+    <div id="load" class="d-flex align-items-center justify-content-center" style="position:absolute; top: 0; left: 0; width:250px; height:250px; margin:20px auto 20px auto; background-color:rgba(255, 255, 255, 0.4)">
         <div class="spinner-border text-primary" role="status">
             <span class="sr-only">Loading...</span>
         </div>
     </div>
     `;
-
-    $("#add").click(function(e) {
-        e.preventDefault();
-        $("#add-card").slideToggle();
-    });
-
-    $("#avatar").change(function(e) {
-        let path = $(this).val();
-        let r = path.substring(path.lastIndexOf("\\") + 1);
-        $(".custom-file label").text(r);
-    });
-
-    $(".remove-user").click(function(e) {
-        var parent = $(this)
-            .parent()
-            .parent();
-        var id = $(this).attr("data-user");
-        parent.remove();
-    });
 
     function upload(image) {
         $("#paint").append(load);
@@ -33,7 +16,8 @@ $(document).ready(function() {
             url: "/upload-base64",
             data: { image: image },
             success: function(data) {
-                $('#load').remove();
+                run = false;
+                $("#load").remove();
                 $(".result").empty();
                 data.result.forEach((r, index) => {
                     $(".result").append(`
@@ -95,13 +79,16 @@ $(document).ready(function() {
     }
 
     $("#predict").click(function() {
-        const imageData = $("#wPaint").wPaint("image");
-        const img = new Image();
-        img.src = imageData;
-        img.onload = function() {
-            const data = scale(img);
-            upload(data);
-        };
+        if (!run) {
+            run = true;
+            const imageData = $("#wPaint").wPaint("image");
+            const img = new Image();
+            img.src = imageData;
+            img.onload = function() {
+                const data = scale(img);
+                upload(data);
+            };
+        }
     });
 
     $("#clear").click(function() {

@@ -1,17 +1,15 @@
 <div class="container d-flex align-items-center flex-column">
     <header class="d-flex align-items-center">
         <img src="/images/icon-128.png" class="mr-3">
-        <h1 class="mr-3">MNIST</h1>
-        {{!-- <button id="add" class="btn btn-primary">Add</button> --}}
+        <h1 class="m-0">MNIST</h1>
     </header>
 
     <div id="paint" style="position:relative">
         <div id="wPaint"
-            style="position:relative; width:250px; height:250px; margin:70px auto 20px auto;">
+            class="shadow"
+            style="position:relative; width:250px; height:250px; margin:20px auto 20px auto;">
         </div>
     </div>
-
-    {{!-- <center id="wPaint-img"></center> --}}
 
     <div class="btn-group" role="group" aria-label="Basic example">
         <button id="predict" class="btn btn-primary">Predict</button>
