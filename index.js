@@ -110,6 +110,7 @@ app.post("/upload-base64", async (req, res) => {
     let result = "";
     pythonProcess.stdout.on("data", data => {
         result = data.toString("utf8");
+        console.log(`INFO::: python-data: ${result}`)
         result = result.substr(0, result.length - 1);
         result = result.split("\n");
         result = result.map(r => Number(r) * 100);
@@ -122,7 +123,7 @@ app.post("/upload-base64", async (req, res) => {
         );
         // req.flash("result", JSON.stringify(result));
         let response = { result, prediction };
-        console.log(`INFO:::: ${JSON.stringify(response)}`)
+        console.log(`INFO:::: predict.reponse ${JSON.stringify(response)}`)
         res.json(response);
     });
 });
