@@ -121,7 +121,9 @@ app.post("/upload-base64", async (req, res) => {
                 (prediction = r > result[prediction] ? index : prediction)
         );
         // req.flash("result", JSON.stringify(result));
-        res.json({ result, prediction });
+        let response = { result, prediction };
+        console.log(`INFO:::: ${JSON.stringify(response)}`)
+        res.json(response);
     });
 });
 
